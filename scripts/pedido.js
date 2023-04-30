@@ -110,7 +110,7 @@ const crearMenuDeOpciones = async (url) => {
 };
 
 
-const carrito = [];
+const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
 const agregarSaboresAlCarrito = () => {
     
@@ -124,6 +124,7 @@ const agregarSaboresAlCarrito = () => {
         if (cantidad > 0) {
             carrito.push({sabor: sabor.value, cantidad: cantidad});
         }
+
     });
 };
 
@@ -132,6 +133,7 @@ const vaciarPedido = (carrito) => {
         carrito.pop();
     };
 };
+saveLocal();
 
 const finalizarPedido = () => {
     swal({
@@ -237,8 +239,6 @@ botonFinalizar.addEventListener('click', () => {
     }
 });
 
-
-
 // CARRITO
 const $contenedorModal = document.querySelector('#contenedor-modal');
 const $modal = document.querySelector('#modal');
@@ -258,3 +258,81 @@ window.addEventListener('click', (evento) => {
         $contenedorModal.classList.remove('contenedor-modal-activo');
     }
 });
+
+const saveLocal = () => {
+localStorage.setItem("carrito", JSON.stringify(carrito))
+};
+
+console.log(carrito);
+console.log(carrito.Length);
+carritoCounter();
+
+const carritoCounter = () => {
+    cantidadCarrito.style.display = "block";
+
+    const carritoLength = carrito.Length;
+
+    localStorage.setItem("carritoLength",  JSON.stringify(carritoLength))
+
+    cantidadCarrito.innerText = JSON.parse(localStorage.getItem("carritoLength"));
+};
+
+
+const empanadas = {
+    "empanadas": [
+      {
+        "id": 1,
+        "sabor":  "Carne Suave",
+        "sigla": "CS",
+        "descripcion": "Carne picada, cebolla, huevo, morrón rojo y verdeo"
+      },
+      {
+        "id": 2,
+        "sabor":  "Carne Picante",
+        "sigla": "CP",
+        "descripcion": "Carne picada, cebolla, verdeo, pimentón y salsa picante"
+      },
+      {
+        "id": 3,
+        "sabor":  "Verdura",
+        "sigla": "VE",
+        "descripcion": "Acelga, cebolla, salsa blanca y queso reggianito"
+      },
+      {
+        "id": 4,
+        "sabor":  "Jamón y Queso",
+        "sigla": "JQ",
+        "descripcion": "Jamón cocido y muzzarella"
+      },
+      {
+        "id": 5,
+        "sabor":  "Roquefort y Jamón",
+        "sigla": "RJ",
+        "descripcion": "Roquefort, jamón y muzzarella"
+      },
+      {
+        "id": 6,
+        "sabor":  "Pollo",
+        "sigla": "PO",
+        "descripcion": "Pollo, cebolla, huevo, verdeo y morrón rojo"
+      }
+    ]
+  };
+  
+  function filtrarEmpanadas(criterios) {
+    return empanadas.empanadas.filter(empanada => {
+      if (criterios.sabor && !empanada.sabor.toLowerCase().includes(criterios.sabor.toLowerCase())) {
+        return false;
+      }
+    
+      if (criterios.descripcion && !empanada.descripcion.toLowerCase().includes(criterios.descripcion.toLowerCase())) {
+        return false;
+      }
+      return true;
+    });
+  }
+  
+  const empanadasFiltradas = filtrarEmpanadas({ sabor: "Carne Suave" });
+  console.log(empanadasFiltradas); // Devuelve la empanada con id=1
+  
+
